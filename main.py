@@ -38,7 +38,7 @@ def recordVolume(index): #Функция для определения сказ�
         text = query.lower()
         saySomething('Вы сказали: {query.lower()}')
     except:
-        saySomething('Произошла ошибка при распозновании речи')
+        saySomething('Произошла ошибка при распознавании речи')
 
 def listDevices():
     for index, name in enumerate(sr.Microphone.list_microphone_names()):
