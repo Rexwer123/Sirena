@@ -1,6 +1,6 @@
 import pyttsx3
 import speech_recognition as sr
-
+from flexx import flx
 #------Начало конфигурации синтезатора речи------
 
 tts = pyttsx3.init()
@@ -25,8 +25,27 @@ def saySomething(string): #Функция для синтеза речи из ж
     tts.say(string)
     tts.runAndWait()
 
+def record_volume(indx): #Функция для определения сказанной фразы, необходимо решить проблему с доступом к микрофону
+    r = sr.Recognizer()
+    with sr.Microphone(device_index = int(indx)) as source:
+        saySomething('Подавляю шум')
+        r.adjust_for_ambient_noise(source, duration=0.5) #настройка подавления фоновых шумов
+        saySomething('Слушаю')
+        audio = r.listen(source)
+    saySomething('Услышала')
+    try:
+        query = r.recognize_google(audio, language = 'ru-RU')
+        text = query.lower()
+        saySomething('Вы сказали: {query.lower()}')
+    except:
+        saySomething('Произошла ошибка при распозновании речи')
+
+
 if __name__ == "__main__": #Выолнить код секции, если main.py был запущен как скрипт
     for index, name in enumerate(sr.Microphone.list_microphone_names()):
         print("Микрофон: {1}\nИндекс: {0}\n".format(index, name))
 
-    microphoneIndex = input('Индекс желаемого устройства ввода: ') #запись индекса желаемого устройства ввода
+    microphoneIndex = input('Индекс желаемого устройства ввода: ')
+    while True:
+        record_volume(microphoneIndex) #запись индекса желаемого устройства ввода
+
