@@ -25,7 +25,7 @@ def saySomething(string): #Функция для синтеза речи из ж
     tts.say(string)
     tts.runAndWait()
 
-def record_volume(indx): #Функция для определения сказанной фразы, необходимо решить проблему с доступом к микрофону
+def recordVolume(indx): #Функция для определения сказанной фразы, необходимо решить проблему с доступом к микрофону
     r = sr.Recognizer()
     with sr.Microphone(device_index = int(indx)) as source:
         saySomething('Подавляю шум')
@@ -47,5 +47,5 @@ if __name__ == "__main__": #Выолнить код секции, если main.
 
     microphoneIndex = input('Индекс желаемого устройства ввода: ')
     while True:
-        record_volume(microphoneIndex) #запись индекса желаемого устройства ввода
+        recordVolume(microphoneIndex) #запись индекса желаемого устройства ввода
 
