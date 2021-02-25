@@ -1,6 +1,6 @@
 import pyttsx3
 import speech_recognition as sr
-from flexx import flx
+
 #------Начало конфигурации синтезатора речи------
 
 tts = pyttsx3.init()
