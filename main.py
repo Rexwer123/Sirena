@@ -1,7 +1,7 @@
 import pyttsx3
 import speech_recognition as sr
 from pymongo import MongoClient
-from pymongo.objectid import ObjectId
+from bson.objectid import ObjectId
 
 #------Начало конфигурации синтезатора речи------
 
@@ -92,6 +92,9 @@ class mongoClass:
             print("[X] Невозможно установить соединение с бд")
         else:
             print("[OK] Настройки и макроссы были успешно сброшены")
+    
+    def closeDBConnections(self):
+        self.client.close()
 
 #Абстрактный класс DB для синхронной работы со всеми базами данных, необходимо для нормального режима работа приложения
 class db:
