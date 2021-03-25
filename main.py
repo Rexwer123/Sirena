@@ -2,7 +2,8 @@ import pyttsx3
 import speech_recognition as sr
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-
+import tkinter as tk
+from multiprocessing import Process
 
 #------Начало конфигурации синтезатора речи------
 
@@ -135,8 +136,29 @@ class db:
         #self.neoforge.closeDBConnections()
 
 
+class userInterface():
+    def __init__(self):
+        self.sirena = Sirena()
+        self.window = tk.Tk()
+        self.label = tk.Label(
+            text="Привет, Tkinter!",
+            fg="white",
+            bg="black",
+            width=20,
+            height=20
+        )
+        self.label.pack()
+        self.window.mainloop()
 
-class Sirena:
+    # def initSirena(self):
+    #     self.sirena.recognizeUserCommand()
+
+            
+
+
+class Sirena():
+    
+
     def __init__(self):
         self.r = sr.Recognizer()
 
@@ -169,7 +191,7 @@ class Sirena:
             audio = self.r.listen(source)
         try:
             command = self.r.recognize_google(audio).lower()
-
+            print(command)
             if 'execute' in command:
                 self.commandIdentification(command.split("execute ")[1])
 
@@ -177,6 +199,5 @@ class Sirena:
             print('[X] UnknownValueError Exception')
 
 if __name__ == "__main__": #Выолнить код секции, если main.py был запущен как скрипт
-    sirena = Sirena()
-    while True:
-        sirena.recognizeUserCommand() #запись индекса желаемого устройства ввода
+     #запись индекса желаемого устройства ввода
+     window = userInterface()
