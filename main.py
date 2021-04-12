@@ -4,6 +4,8 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 import tkinter as tk
 from multiprocessing import Process
+import time
+import sys
 
 #------Начало конфигурации синтезатора речи------
 
@@ -138,8 +140,9 @@ class db:
 
 class userInterface():
     def __init__(self):
-        self.sirena = Sirena()
+        
         self.window = tk.Tk()
+        self.sirena = Sirena(self.window)
         self.label = tk.Label(
             text="Привет, Tkinter!",
             fg="white",
@@ -148,7 +151,9 @@ class userInterface():
             height=20
         )
         self.label.pack()
-        self.window.mainloop()
+        while True:
+            self.sirena.recognizeUserCommand()
+            
 
     # def initSirena(self):
     #     self.sirena.recognizeUserCommand()
@@ -159,8 +164,9 @@ class userInterface():
 class Sirena():
     
 
-    def __init__(self):
+    def __init__(self, window):
         self.r = sr.Recognizer()
+        self.window = window
 
     def saySomething(self, string): #Функция для синтеза речи из желаемой строки
         tts.say(string)
@@ -174,11 +180,14 @@ class Sirena():
 
     def sleep(self): #Завершить работу приложения
         self.saySomething("Goodnight")
-        exit()
+        self.window.destroy()
+        sys.exit(0)
+    def launchWindow(self):
+        self.window.update()
 
     def commandIdentification(self, command):
         if command == 'sleep':
-            self.goToSleep()
+            self.sleep()
         if command == 'hello':
             self.sayHello()
         else:
@@ -186,18 +195,19 @@ class Sirena():
 
     def recognizeUserCommand(self):
         with sr.Microphone() as source:
-            self.r.pause_threshold = 0.5
+            self.r.pause_threshold = 1.5
             self.r.adjust_for_ambient_noise(source, duration=0.25)
             audio = self.r.listen(source)
         try:
             command = self.r.recognize_google(audio).lower()
-            print(command)
             if 'execute' in command:
+                print(command)
                 self.commandIdentification(command.split("execute ")[1])
-
-        except sr.UnknownValueError:
-            print('[X] UnknownValueError Exception')
+                self.window.update()
+        except:
+                print('Failed recognition or has no execute in')
 
 if __name__ == "__main__": #Выолнить код секции, если main.py был запущен как скрипт
      #запись индекса желаемого устройства ввода
      window = userInterface()
+     
